@@ -1,6 +1,5 @@
 package sim
 
-// Car: estructura por valor (para snapshot seguro)
 type Car struct {
 	ID         int
 	Dir        Dir

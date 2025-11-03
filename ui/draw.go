@@ -14,7 +14,6 @@ const (
 	cross = 240.0
 )
 
-// keep this equal to sim.laneOffset
 var laneOffset = 80.0
 
 func drawRoads(screen *ebiten.Image) {
@@ -47,31 +46,26 @@ func drawCrosswalks(screen *ebiten.Image) {
 	}
 }
 
-// draw two semaphores placed in different lanes and show yellow visually
 func drawSemaphores(screen *ebiten.Image, light sim.SnapshotLight) {
 	cx, cy := float64(ScreenW)/2, float64(ScreenH)/2
 
-	// NS semaphore on left lane (vertical road)
 	semN_x := cx - laneOffset
 	semN_y := cy - cross/2 - 70
 	drawSemWithState(screen, semN_x, semN_y, light.NSState)
 
-	// EW semaphore on bottom lane (horizontal road)
 	semE_x := cx + cross/2 + 70
 	semE_y := cy + laneOffset
 	drawSemWithState(screen, semE_x, semE_y, light.EWState)
 }
 
 func drawSemWithState(screen *ebiten.Image, x, y float64, state sim.SemState) {
-	// post
 	ebitenutil.DrawRect(screen, x-6, y-8, 12, 56, color.RGBA{30, 30, 30, 255})
 	boxW := 28.0
 	boxH := 48.0
 	ebitenutil.DrawRect(screen, x-boxW/2, y-8, boxW, boxH, color.RGBA{20, 20, 20, 255})
 
 	lightW := 10.0
-	// draw each light with correct color
-	// top = red
+
 	switch state {
 	case sim.SemGreen:
 		ebitenutil.DrawRect(screen, x-6-lightW/2, y+2, lightW, lightW, color.RGBA{80, 80, 80, 200})

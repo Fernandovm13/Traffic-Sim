@@ -1,6 +1,5 @@
 package sim
 
-// Tipos y constantes compartidas para la simulación.
 
 type Dir int
 
@@ -22,7 +21,6 @@ const (
 	maxOccupy  = 3
 )
 
-// SemState representa el estado del semáforo.
 type SemState int
 
 const (
@@ -31,7 +29,6 @@ const (
 	SemRed
 )
 
-// Semaphore: duración y estado
 type Semaphore struct {
 	GreenDur  int
 	YellowDur int

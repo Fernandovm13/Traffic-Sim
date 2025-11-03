@@ -13,7 +13,6 @@ func loop(e *Engine) {
 		case <-e.ctx.Done():
 			return
 		case <-ticker.C:
-			// fase controlada centralmente (sin doble verde)
 			e.mu.Lock()
 			e.phaseTimer--
 			if e.phaseTimer <= 0 {
@@ -38,7 +37,6 @@ func loop(e *Engine) {
 				}
 			}
 
-			// snapshot (se copia bajo lock)
 			snap := Snapshot{
 				Cars:  make([]Car, len(e.cars)),
 				Light: SnapshotLight{NSState: e.semNS.State(), EWState: e.semEW.State()},
@@ -46,7 +44,6 @@ func loop(e *Engine) {
 			for i, c := range e.cars {
 				snap.Cars[i] = *c
 			}
-			// enviar snapshot no bloqueante
 			select {
 			case e.snapshotCh <- snap:
 			default:
@@ -116,7 +113,6 @@ func loop(e *Engine) {
 							cxp, cyp := crossingPointFor(d)
 							front.Tx = cxp
 							front.Ty = cyp
-							// pop queue
 							if len(e.queues[d]) > 0 {
 								e.queues[d] = e.queues[d][1:]
 							}
@@ -197,7 +193,7 @@ func loop(e *Engine) {
 				}
 			}
 
-			// limpiar muy lejos
+			// limpiar
 			live := e.cars[:0]
 			for _, c := range e.cars {
 				if c.X < -600 || c.X > 1600 || c.Y < -600 || c.Y > 1600 {

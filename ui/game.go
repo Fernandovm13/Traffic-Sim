@@ -28,13 +28,11 @@ func NewGame(engine *sim.Engine) *Game {
 
 func (g *Game) Update() error {
 	g.frame++
-	// leer snapshot si hay una nueva (no bloqueante)
 	select {
 	case s := <-g.engine.SnapshotChan():
 		g.lastSnap = s
 	default:
 	}
-	// spawn on space (non-blocking)
 	if ebiten.IsKeyPressed(ebiten.KeySpace) {
 		select {
 		case g.engine.SpawnCh <- sim.North:
@@ -45,15 +43,12 @@ func (g *Game) Update() error {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	// background
 	screen.Fill(color.RGBA{R: 180, G: 220, B: 200, A: 255})
 
-	// draw map and sems (use lastSnap.Light)
 	drawRoads(screen)
 	drawCrosswalks(screen)
 	drawSemaphores(screen, g.lastSnap.Light)
 
-	// draw cars from snapshot (sorted)
 	cars := g.lastSnap.Cars
 	sort.SliceStable(cars, func(i, j int) bool { return cars[i].Y < cars[j].Y })
 	for i := range cars {

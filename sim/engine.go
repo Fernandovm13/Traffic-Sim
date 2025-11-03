@@ -7,7 +7,6 @@ import (
 	"time"
 )
 
-// Engine: fachada pública del motor de simulación.
 type Engine struct {
 	mu sync.RWMutex
 
@@ -80,7 +79,6 @@ func NewEngine() *Engine {
 	return e
 }
 
-// SnapshotChan devuelve el canal donde el engine publica snapshots (solo-lectura).
 func (e *Engine) SnapshotChan() <-chan Snapshot { return e.snapshotCh }
 
 // Start lanza workers, spawnLoop y loop principal.
@@ -111,7 +109,6 @@ func (e *Engine) Start() {
 
 // Stop solicita cierre y espera goroutines.
 func (e *Engine) Stop() {
-	// Cancel context (idempotent)
 	e.cancel()
 	// Wait all goroutines finish
 	e.wg.Wait()
